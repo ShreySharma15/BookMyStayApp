@@ -18,31 +18,17 @@ package src;
  */
 
 public class BookMyStayApp {
-      public static void main(String[] args) {
+       public static void main(String[] args) {
 
-        System.out.println("=== Hotel Room Initialization ===");
+        RoomInventory inventory = new RoomInventory();
 
-        Room single = new SingleRoom();
-        Room doubleRoom = new DoubleRoom();
-        Room suite = new SuiteRoom();
+        System.out.println("Current Room Availability:");
+        System.out.println(inventory.getRoomAvailability());
 
-        int singleAvailable = 5;
-        int doubleAvailable = 3;
-        int suiteAvailable = 2;
+        inventory.updateAvailability("Single", 4);
 
-        System.out.println("\nSingle Room:");
-        single.displayRoomDetails();
-        System.out.println("Available: " + singleAvailable);
-
-        System.out.println("\nDouble Room:");
-        doubleRoom.displayRoomDetails();
-        System.out.println("Available: " + doubleAvailable);
-
-        System.out.println("\nSuite Room:");
-        suite.displayRoomDetails();
-        System.out.println("Available: " + suiteAvailable);
-
-        System.out.println("\nSystem execution completed.");
+        System.out.println("\nUpdated Room Availability:");
+        System.out.println(inventory.getRoomAvailability());
     }
 }
 
