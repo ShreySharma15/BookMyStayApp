@@ -1,34 +1,41 @@
 package src;
 /**
  * 
- * MAIN CLASS – UseCase1HotelBookingApp
+ * MAIN CLASS – HotelBookingApp
  * 
- * Use Case 2: Basic Room Types & Static Availability
+ * Use Case 4: Room Search & Availability Check
  *
  * Description:
- * Demonstrates room initialization using domain models.
+ * This class demonstrates how guests
+ * can view available rooms without
+ * modifying inventory data.
  *
- * At this stage, the application:
- * - Starts execution from the main() method
- * - Displays a welcome message to the user
- * - Confirms that the system has started successfully
+ * The system enforces read-only access
+ * by design and usage discipline.
  *
  * @author shrey Sharma
- * @version 2.1
+ * @version 4.0
  */
 
 public class BookMyStayApp {
        public static void main(String[] args) {
 
+        System.out.println("Room Search");
+
         RoomInventory inventory = new RoomInventory();
 
-        System.out.println("Current Room Availability:");
-        System.out.println(inventory.getRoomAvailability());
+        Room singleRoom = new SingleRoom();
+        Room doubleRoom = new DoubleRoom();
+        Room suiteRoom = new SuiteRoom();
 
-        inventory.updateAvailability("Single", 4);
+        RoomSearchService searchService = new RoomSearchService();
 
-        System.out.println("\nUpdated Room Availability:");
-        System.out.println(inventory.getRoomAvailability());
+        searchService.searchAvailableRooms(
+                inventory,
+                singleRoom,
+                doubleRoom,
+                suiteRoom
+        );
     }
 }
 
