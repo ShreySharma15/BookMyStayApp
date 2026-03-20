@@ -45,4 +45,8 @@ public class RoomInventory {
     public void updateAvailability(String roomType, int count) {
         roomAvailability.put(roomType, count);
     }
+
+    public void decrementRoom(String roomType) {
+        roomAvailability.put(roomType, roomAvailability.get(roomType) - 1);
+    }
 }
