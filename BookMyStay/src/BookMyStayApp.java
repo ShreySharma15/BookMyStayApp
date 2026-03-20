@@ -1,41 +1,40 @@
 package src;
+
 /**
- * 
+ *
  * MAIN CLASS – HotelBookingApp
- * 
- * Use Case 4: Room Search & Availability Check
- *
+ * <p>
+ * Use Case 5: Booking Request (First-Come-First-Served)
+ * <p>
  * Description:
- * This class demonstrates how guests
- * can view available rooms without
- * modifying inventory data.
+ * This class demostrates how booking requests are p
+ * accepted and queued in a fair order
+ * <p>
+ * No room allocation is performed here
  *
- * The system enforces read-only access
- * by design and usage discipline.
- *
- * @author shrey Sharma
- * @version 4.0
+ * @author Shrey Sharma
+ * @version 5.0
  */
 
 public class BookMyStayApp {
-       public static void main(String[] args) {
+    public static void main(String[] args) {
 
-        System.out.println("Room Search");
+        System.out.println("Booking Request Queue");
 
-        RoomInventory inventory = new RoomInventory();
+        BookingRequestQueue bookingQueue = new BookingRequestQueue();
 
-        Room singleRoom = new SingleRoom();
-        Room doubleRoom = new DoubleRoom();
-        Room suiteRoom = new SuiteRoom();
+        Reservation r1 = new Reservation("Shrey", "Single");
+        Reservation r2 = new Reservation("Triya", "Double");
+        Reservation r3 = new Reservation("Aditya", "Suite");
 
-        RoomSearchService searchService = new RoomSearchService();
+        bookingQueue.addRequest(r1);
+        bookingQueue.addRequest(r2);
+        bookingQueue.addRequest(r3);
 
-        searchService.searchAvailableRooms(
-                inventory,
-                singleRoom,
-                doubleRoom,
-                suiteRoom
-        );
+        while(bookingQueue.hasPendingRequests()){
+            Reservation r = bookingQueue.getNextRequest();
+            System.out.println("Processing booking for Guest: " + r.getGuestName() + ", Room Type: " + r.getroomType());
+        }
     }
 }
 
