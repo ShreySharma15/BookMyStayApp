@@ -3,37 +3,46 @@ package src;
 /**
  *
  * MAIN CLASS – HotelBookingApp
- * <p>
- * Use Case 5: Booking Request (First-Come-First-Served)
- * <p>
+ *
+ * Use Case 6: Reservation Confirmation & Room Allocation
+ *
  * Description:
- * This class demostrates how booking requests are p
- * accepted and queued in a fair order
- * <p>
- * No room allocation is performed here
+ * This class demonstrates how booking requests are
+ * confirmed and rooms are allocated successfully
+ *
+ * Consumes requests in FIFO order and updates inventory
  *
  * @author Shrey Sharma
- * @version 5.0
+ * @version 6.0
  */
 
 public class BookMyStayApp {
     public static void main(String[] args) {
 
-        System.out.println("Booking Request Queue");
+
+        System.out.println("Room Allocation Processing");
+
+        RoomInventory inventory = new RoomInventory();
 
         BookingRequestQueue bookingQueue = new BookingRequestQueue();
 
-        Reservation r1 = new Reservation("Shrey", "Single");
-        Reservation r2 = new Reservation("Triya", "Double");
-        Reservation r3 = new Reservation("Aditya", "Suite");
+        bookingQueue.addRequest(new Reservation("Shrey", "Single"));
+        bookingQueue.addRequest(new Reservation("Triya", "Double"));
+        bookingQueue.addRequest(new Reservation("Aditya", "Suite"));
 
-        bookingQueue.addRequest(r1);
-        bookingQueue.addRequest(r2);
-        bookingQueue.addRequest(r3);
+        RoomAllocationService allocationService = new RoomAllocationService();
 
-        while(bookingQueue.hasPendingRequests()){
-            Reservation r = bookingQueue.getNextRequest();
-            System.out.println("Processing booking for Guest: " + r.getGuestName() + ", Room Type: " + r.getroomType());
+        while (bookingQueue.hasPendingRequests()) {
+
+            Reservation request = bookingQueue.getNextRequest();
+
+            allocationService.allocateRoom(request, inventory);
+
+            System.out.println(
+                    "Booking confirmed for Guest: " +
+                            request.getGuestName() +
+                            ", Room ID: Assigned"
+            );
         }
     }
 }
