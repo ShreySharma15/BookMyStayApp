@@ -6,14 +6,15 @@ import java.util.Scanner;
  *
  * MAIN CLASS – HotelBookingApp
  *
-* Use Case 10: Booking Cancellation & Inventory Rollback
+ * Use Case 11: Concurrent Booking Simulation
  *
  * Description:
- * This class demonstrates how confirmed
- * bookings can be cancelled safely.
+ * This class simulates multiple users
+ * attempting to book rooms at the same time.
  *
- * Inventory is restored and rollback
- * history is maintained.
+ * It highlights race conditions and
+ * demonstrates how synchronization
+ * prevents inconsistent allocations.
  *
  * @author Shrey Sharma
  * @version 10.0
@@ -22,25 +23,55 @@ import java.util.Scanner;
 public class BookMyStayApp {
      public static void main(String[] args) {
 
-        System.out.println("Booking Cancellation");
+        System.out.println("Concurrent Booking Simulation");
 
         RoomInventory inventory = new RoomInventory();
+        BookingRequestQueue bookingQueue = new BookingRequestQueue();
+        RoomAllocationService allocationService = new RoomAllocationService();
 
-        CancellationService cancellationService = new CancellationService();
+        bookingQueue.addRequest(new Reservation("Abhi", "Single"));
+        bookingQueue.addRequest(new Reservation("Vanmathi", "Double"));
+        bookingQueue.addRequest(new Reservation("Kural", "Suite"));
+        bookingQueue.addRequest(new Reservation("Subha", "Single"));
 
-        String reservationId = "Single-1";
-        String roomType = "Single";
-
-        cancellationService.registerBooking(reservationId, roomType);
-
-        cancellationService.cancelBooking(reservationId, inventory);
-
-        cancellationService.showRollbackHistory();
-
-        System.out.println(
-                "\nUpdated Single Room Availability: "
-                        + inventory.getRoomAvailability().get("Single")
+        Thread t1 = new Thread(
+                new ConcurrentBookingProcessor(
+                        bookingQueue,
+                        inventory,
+                        allocationService
+                )
         );
+
+        Thread t2 = new Thread(
+                new ConcurrentBookingProcessor(
+                        bookingQueue,
+                        inventory,
+                        allocationService
+                )
+        );
+
+        // Start concurrent processing
+        t1.start();
+        t2.start();
+
+        try {
+            t1.join();
+            t2.join();
+        }
+        catch (InterruptedException e) {
+            System.out.println("Thread execution interrupted.");
+        }
+
+        System.out.println("\nRemaining Inventory:");
+
+        System.out.println("Single: " +
+                inventory.getRoomAvailability().get("Single"));
+
+        System.out.println("Double: " +
+                inventory.getRoomAvailability().get("Double"));
+
+        System.out.println("Suite: " +
+                inventory.getRoomAvailability().get("Suite"));
     }
 }
 
