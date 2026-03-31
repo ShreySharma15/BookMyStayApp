@@ -4,13 +4,15 @@ package src;
  *
  * MAIN CLASS – HotelBookingApp
  *
- * Use Case 6: Reservation Confirmation & Room Allocation
+ * Use Case 8: Booking History & Reporting
  *
  * Description:
- * This class demonstrates how booking requests are
- * confirmed and rooms are allocated successfully
+ * This class demonstrates how
+ * confirmed bookings are stored
+ * and reported.
  *
- * Consumes requests in FIFO order and updates inventory
+ * The system maintains an ordered
+ * audit trail of reservations.
  *
  * @author Shrey Sharma
  * @version 6.0
