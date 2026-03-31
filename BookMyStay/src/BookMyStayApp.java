@@ -20,30 +20,23 @@ public class BookMyStayApp {
     public static void main(String[] args) {
 
 
-        System.out.println("Room Allocation Processing");
+        System.out.println("Add-On Service Selection Demo");
 
-        RoomInventory inventory = new RoomInventory();
+        AddOnServiceManager serviceManager = new AddOnServiceManager();
 
-        BookingRequestQueue bookingQueue = new BookingRequestQueue();
+        String reservationId = "RES101";
 
-        bookingQueue.addRequest(new Reservation("Shrey", "Single"));
-        bookingQueue.addRequest(new Reservation("Triya", "Double"));
-        bookingQueue.addRequest(new Reservation("Aditya", "Suite"));
+        AddOnService breakfast = new AddOnService("Breakfast", 500);
+        AddOnService spa = new AddOnService("Spa", 2000);
+        AddOnService pickup = new AddOnService("Airport Pickup", 800);
 
-        RoomAllocationService allocationService = new RoomAllocationService();
+        serviceManager.addService(reservationId, breakfast);
+        serviceManager.addService(reservationId, spa);
+        serviceManager.addService(reservationId, pickup);
 
-        while (bookingQueue.hasPendingRequests()) {
+        double totalCost = serviceManager.calculateTotalServiceCost(reservationId);
 
-            Reservation request = bookingQueue.getNextRequest();
-
-            allocationService.allocateRoom(request, inventory);
-
-            System.out.println(
-                    "Booking confirmed for Guest: " +
-                            request.getGuestName() +
-                            ", Room ID: Assigned"
-            );
-        }
+        System.out.println("Total add-on service cost: ₹" + totalCost);
     }
 }
 
