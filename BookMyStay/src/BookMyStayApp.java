@@ -1,44 +1,56 @@
 package src;
 
+import java.util.Scanner;
+
 /**
  *
  * MAIN CLASS – HotelBookingApp
  *
- * Use Case 8: Booking History & Reporting
+ * Use Case 9: Error Handling & Validation
  *
  * Description:
- * This class demonstrates how
- * confirmed bookings are stored
- * and reported.
+ * This class is responsible for validating
+ * booking requests before they are processed.
  *
- * The system maintains an ordered
- * audit trail of reservations.
+ * All validation rules are centralized
+ * to avoid duplication and inconsistency.
  *
  * @author Shrey Sharma
- * @version 6.0
+ * @version 9.0
  */
 
 public class BookMyStayApp {
     public static void main(String[] args) {
 
+        System.out.println("Booking Validation");
 
-        System.out.println("Add-On Service Selection Demo");
+        Scanner scanner = new Scanner(System.in);
 
-        AddOnServiceManager serviceManager = new AddOnServiceManager();
+        RoomInventory inventory = new RoomInventory();
+        ReservationValidator validator = new ReservationValidator();
+        BookingRequestQueue bookingQueue = new BookingRequestQueue();
 
-        String reservationId = "RES101";
+        try {
 
-        AddOnService breakfast = new AddOnService("Breakfast", 500);
-        AddOnService spa = new AddOnService("Spa", 2000);
-        AddOnService pickup = new AddOnService("Airport Pickup", 800);
+            System.out.print("Enter guest name: ");
+            String guestName = scanner.nextLine();
 
-        serviceManager.addService(reservationId, breakfast);
-        serviceManager.addService(reservationId, spa);
-        serviceManager.addService(reservationId, pickup);
+            System.out.print("Enter room type (Single/Double/Suite): ");
+            String roomType = scanner.nextLine();
 
-        double totalCost = serviceManager.calculateTotalServiceCost(reservationId);
+            validator.validate(guestName, roomType, inventory);
 
-        System.out.println("Total add-on service cost: ₹" + totalCost);
+            bookingQueue.addRequest(new Reservation(guestName, roomType));
+
+            System.out.println("Booking request added successfully.");
+
+        } catch (InvalidBookingException e) {
+
+            System.out.println("Booking failed: " + e.getMessage());
+
+        } finally {
+            scanner.close();
+        }
     }
 }
 
