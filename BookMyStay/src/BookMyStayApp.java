@@ -6,51 +6,41 @@ import java.util.Scanner;
  *
  * MAIN CLASS – HotelBookingApp
  *
- * Use Case 9: Error Handling & Validation
+* Use Case 10: Booking Cancellation & Inventory Rollback
  *
  * Description:
- * This class is responsible for validating
- * booking requests before they are processed.
+ * This class demonstrates how confirmed
+ * bookings can be cancelled safely.
  *
- * All validation rules are centralized
- * to avoid duplication and inconsistency.
+ * Inventory is restored and rollback
+ * history is maintained.
  *
  * @author Shrey Sharma
- * @version 9.0
+ * @version 10.0
  */
 
 public class BookMyStayApp {
-    public static void main(String[] args) {
+     public static void main(String[] args) {
 
-        System.out.println("Booking Validation");
-
-        Scanner scanner = new Scanner(System.in);
+        System.out.println("Booking Cancellation");
 
         RoomInventory inventory = new RoomInventory();
-        ReservationValidator validator = new ReservationValidator();
-        BookingRequestQueue bookingQueue = new BookingRequestQueue();
 
-        try {
+        CancellationService cancellationService = new CancellationService();
 
-            System.out.print("Enter guest name: ");
-            String guestName = scanner.nextLine();
+        String reservationId = "Single-1";
+        String roomType = "Single";
 
-            System.out.print("Enter room type (Single/Double/Suite): ");
-            String roomType = scanner.nextLine();
+        cancellationService.registerBooking(reservationId, roomType);
 
-            validator.validate(guestName, roomType, inventory);
+        cancellationService.cancelBooking(reservationId, inventory);
 
-            bookingQueue.addRequest(new Reservation(guestName, roomType));
+        cancellationService.showRollbackHistory();
 
-            System.out.println("Booking request added successfully.");
-
-        } catch (InvalidBookingException e) {
-
-            System.out.println("Booking failed: " + e.getMessage());
-
-        } finally {
-            scanner.close();
-        }
+        System.out.println(
+                "\nUpdated Single Room Availability: "
+                        + inventory.getRoomAvailability().get("Single")
+        );
     }
 }
 
